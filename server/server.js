@@ -4,7 +4,6 @@ const cors = require('cors')
 const app = express()
 const server = require("http").createServer(app);
 const io = require('socket.io')(server, {cors: {origin: "*"}});
-const path = require('path');
 
 let conversations = [];
 
@@ -39,9 +38,14 @@ app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)))
 //ROUTES
 app.post('/messages' , (req, res)=>{
     try {
-        conversations.push(req.body)
-        console.log(conversations)
-        res.status(200).send({message: "message added"})
+
+        if (req.body.recipients !== undefined && req.body.text !== undefined && req.body.sender !== undefined) {
+            conversations.push(req.body)
+            // console.log(conversations)
+            res.status(200).send({message: "message added"})
+        } else {
+            res.status(400).send({error: "som values are missing"})
+        }
     } catch (error) {
         res.status(400).send({error})
     }
@@ -140,17 +144,17 @@ io.on('connection', socket => {
             })
         })
     })
-    console.log(id)
+    // console.log(id)
     // console.log(recipients)
-    console.log('connected')
+    // console.log('connected')
 })
 
-//SERVER LISTENING
+// SERVER LISTENING
 server.listen(4000, function () {
   console.log('CORS-enabled web server listening on port 4000')
 })
 
-
+module.exports = server;
 
 
 
