@@ -51,8 +51,7 @@ export const OpenConversation = () => {
             <Form.Group className='m-2'>
                 <InputGroup>
                     <Form.Control 
-                        as="textarea" 
-                        required 
+                        as="textarea"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         style={{height: '75px', resize: 'none'}}
